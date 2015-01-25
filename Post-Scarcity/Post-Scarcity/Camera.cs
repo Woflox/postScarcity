@@ -28,12 +28,18 @@ namespace Post_Scarcity
             lastPos = position;
             Update(0);
         }
-        float yoffset = 0;
+       // float yoffset = 0;
         public void Update(float dt)
         {
             lastPos = position;
-            yoffset -= 2;
-            Vector2 targetPos = new Vector2(Game1.instance.userPerson.position.X, yoffset) + OFFSET;
+            //yoffset -= 2;
+            Vector2 targetPos = new Vector2(Game1.instance.userPerson.position.X, 0) + OFFSET;
+            if (Game1.instance.userPerson.state == Person.State.Climbing ||
+                 Game1.instance.userPerson.state == Person.State.Looking)
+            {
+                targetPos.Y += Game1.instance.userPerson.position.Y;
+            }
+
             if (Game1.instance.userPerson.flipped)
             {
                 targetPos.X -= OFFSET.X * 0.7f;

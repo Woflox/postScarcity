@@ -99,6 +99,7 @@ namespace Post_Scarcity
             camera = new Camera(new Vector2(0, 0));
             background = new Background();
             sky = new SpriteEntity(Vector2.Zero, "sky");
+            Ladder.Spawn(100);
             Streak.InitializeWeights(true);
             for (int i = 0; i < streaks.Length; i++)
             {

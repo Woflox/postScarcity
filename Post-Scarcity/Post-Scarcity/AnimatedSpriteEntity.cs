@@ -41,13 +41,16 @@ namespace Post_Scarcity
 
         public override void Update(float dt)
         {
-            animation.progress += dt / animationRate;
-            animation.progress %= 1;
-
-            frame = animation.startFrame + (int)(animation.progress * animation.numFrames);
-            if (frame == animation.startFrame + animation.numFrames)
+            if (animationRate > 0)
             {
-                frame -= 1;
+                animation.progress += dt / animationRate;
+                animation.progress %= 1;
+
+                frame = animation.startFrame + (int)(animation.progress * animation.numFrames);
+                if (frame == animation.startFrame + animation.numFrames)
+                {
+                    frame -= 1;
+                }
             }
 
             base.Update(dt);
@@ -75,7 +78,7 @@ namespace Post_Scarcity
                                             new Rectangle(frame*spriteWidth, 0, spriteWidth, texture.Height),
                                             color, 0, Vector2.Zero, 1,
                                             flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                                            (position.Y - Game1.boundary.Y) / Game1.boundary.Height);
+                                            Math.Max(0.0001f,(position.Y - Game1.boundary.Y) / Game1.boundary.Height));
         }
     }
 }

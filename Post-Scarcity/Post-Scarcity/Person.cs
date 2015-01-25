@@ -24,7 +24,7 @@ namespace Post_Scarcity
         const float ISOMETRIC_Y_COEFFICIENT = 0.75f;
         const float FLIP_HYSTERISIS = 0.1f;
         const float WALK_ANIMATION_RATE = 0.35f;
-        const float CLIMB_ANIMATION_RATE = 0.35f;
+        const float CLIMB_ANIMATION_RATE = 0.5f;
 
         float t = 0;
         protected Vector2 moveDir;
@@ -63,7 +63,7 @@ namespace Post_Scarcity
                     break;
                 case State.Climbing:
                     position.Y += moveDir.Y;
-                    if (position.Y > Game1.boundary.Bottom)
+                    if (position.Y > Game1.boundary.Top)
                     {
                         state = State.Normal;
                     }

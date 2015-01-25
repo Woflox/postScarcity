@@ -112,6 +112,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="DialogBox.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Ladder.cs" />
     <Compile Include="NPCAdult.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="SpriteEntity.cs" />
