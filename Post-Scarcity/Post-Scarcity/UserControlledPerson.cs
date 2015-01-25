@@ -26,6 +26,8 @@ namespace Post_Scarcity
         int conversationIndex = 0;
 
         public bool conversationsExhausted = false;
+        public bool reachedTop = false;
+
 
         string[] regularConversions =
         {
@@ -98,10 +100,23 @@ namespace Post_Scarcity
                     }
                 }
 
-                if (position.X > spawnX)
+                if (position.X > spawnX && !reachedTop)
                 {
                     spawnX += SPAWN_EVERY;
                     Game1.instance.entities.Add(new NPCAdult(position.X + SPAWN_MIN_DISTANCE + (float)rand.NextDouble() * SPAWN_RANGE));
+                }
+            }
+            else if (state == State.Climbing || state == State.Looking)
+            {
+                float progress = (Game1.boundary.Top - position.Y) / Ladder.LADDER_HEIGHT;
+                //TODO: music fade in
+            }
+            if (state == State.Looking)
+            {
+                if (!reachedTop)
+                {
+                    reachedTop = true;
+
                 }
             }
         }

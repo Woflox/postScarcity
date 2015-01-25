@@ -67,6 +67,23 @@ namespace Post_Scarcity
                     {
                         state = State.Normal;
                     }
+                    if (position.Y < Game1.boundary.Top-Ladder.LADDER_HEIGHT + 48)
+                    {
+                        position.Y = Game1.boundary.Top - Ladder.LADDER_HEIGHT + 4;
+                        state = State.Looking;
+                    }
+                    break;
+                case State.Looking:
+                    if (moveDir.Y > 0)
+                    {
+                        position.Y = Game1.boundary.Top - Ladder.LADDER_HEIGHT + 48;
+                        state = State.Climbing;
+                    }
+                    else
+                    {
+                        flipped = true;
+                        moveDir = Vector2.Zero;
+                    }
                     break;
             }
 
