@@ -71,6 +71,14 @@ namespace Post_Scarcity
             int lampPostRenderCount = (RENDER_DISTANCE * 2) / LAMP_POST_DISTANCE;
             lampPostXStart -= (lampPostRenderCount / 2) * LAMP_POST_DISTANCE;
 
+            foreach (SpriteEntity entity in Game1.instance.entities)
+            {
+                if (entity is NPCChild)
+                {
+                    return;
+                }
+            }
+
             for (int i = 0; i < 8; i++)
             {
                 Game1.instance.spriteBatch.Draw(frame == 0 ? lampPost1 : lampPost2,

@@ -19,6 +19,7 @@ namespace Post_Scarcity
         const int MARGIN = 40;
         const int FONT_SCALE = 4;
         const float VOLUME = 0.125f;
+        const float GAME_OVER_WAIT_TIME = 2.0f;
 
         public enum State
         {
@@ -36,6 +37,7 @@ namespace Post_Scarcity
         Texture2D background;
         bool readingFast;
         bool soundThisFrame;
+        float timeSinceFinalDialog = 0;
 
         public State state;
         SoundEffect letterSound;
@@ -56,10 +58,7 @@ namespace Post_Scarcity
                     UpdateReading(dt);
                     break;
                 case State.Finished:
-                    if (Input.action)
-                    {
-                        Close();
-                    }
+                    UpdateFinished(dt);
                     break;
                 case State.Closed:
                     break;
@@ -88,6 +87,36 @@ namespace Post_Scarcity
                 if (state == State.Finished)
                 {
                     return;
+                }
+            }
+        }
+
+        public void UpdateFinished(float dt)
+        {
+            if (Game1.instance.userPerson.personTalking is NPCAdult)
+            {
+                if (Input.action)
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                if (Game1.instance.userPerson.endingConversationIndex == Game1.instance.userPerson.endingConversations.Length)
+                {
+                    timeSinceFinalDialog += dt;
+                    if (timeSinceFinalDialog > GAME_OVER_WAIT_TIME)
+                    {
+                        Game1.instance.gameOver = true;
+                    }
+                }
+                else
+                {
+                    if (Input.action)
+                    {
+                        ShowDialog(Game1.instance.userPerson.endingConversations[Game1.instance.userPerson.endingConversationIndex]);
+                        Game1.instance.userPerson.endingConversationIndex++;
+                    }    
                 }
             }
         }
@@ -165,7 +194,7 @@ namespace Post_Scarcity
                 (Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - (WIDTH + 2 * PADDING)) / 2, 
                 MARGIN,
                 WIDTH + PADDING * 2,
-                (int)font.MeasureString(textShown).Y / FONT_SCALE + PADDING * 2), Color.White);
+                (int)font.MeasureString(textShown).Y / FONT_SCALE + PADDING * 2), new Color(0, 0, 0, 0.5f));
             Game1.instance.spriteBatch.DrawString(font, textShown,
                 new Vector2((Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - WIDTH) / 2,
                             MARGIN + PADDING), Color.White, 0, Vector2.Zero, 1f / FONT_SCALE, SpriteEffects.None, 0);

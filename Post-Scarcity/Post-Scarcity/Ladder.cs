@@ -18,7 +18,7 @@ namespace Post_Scarcity
         public static void Spawn(float xPos)
         {
             Game1.instance.entities.Add(new Ladder(xPos));
-            Game1.instance.camera.boundary.Width = (int)((xPos - Game1.instance.camera.boundary.X) + CAMERA_PADDING);
+            Game1.boundary.Width = (int)((xPos - Game1.instance.camera.boundary.X) + CAMERA_PADDING);
         }
 
         public Ladder(float xPos)
@@ -30,8 +30,9 @@ namespace Post_Scarcity
         {
             for (int i = 0; i < NUM_SEGMENTS; i++)
             {
+                float fade = Game1.instance.fadeValue * Game1.instance.fadeValue;
                 Game1.instance.spriteBatch.Draw(texture,
-                    new Vector2(position.X - texture.Width / 2, position.Y - (i + 1) * texture.Height), color);
+                    new Vector2(position.X - texture.Width / 2, position.Y - (i + 1) * texture.Height), new Color(fade, fade, fade, 1));
             }
         }
 

@@ -37,6 +37,10 @@ namespace Post_Scarcity
             if (Game1.instance.userPerson.state == Person.State.Climbing ||
                  Game1.instance.userPerson.state == Person.State.Looking)
             {
+                if (Game1.instance.userPerson.reachedTop && Game1.instance.userPerson.state == Person.State.Climbing)
+                {
+                    targetPos.Y *= -1;
+                }
                 targetPos.Y += Game1.instance.userPerson.position.Y;
             }
 
@@ -44,8 +48,8 @@ namespace Post_Scarcity
             {
                 targetPos.X -= OFFSET.X * 0.7f;
             }
-            targetPos.X = Math.Max(Game1.boundary.X + Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
-            targetPos.X = Math.Min(Game1.boundary.X + Game1.boundary.Width - Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
+            targetPos.X = Math.Max(Game1.boundary.Left + Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
+            targetPos.X = Math.Min(Game1.boundary.Right- Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
             targetPos.Y = Math.Max(targetPos.Y, MIN_Y + Game1.instance.GraphicsDevice.PresentationParameters.BackBufferHeight / 2);
 
             position = position * SMOOTH_COEFFICIENT + targetPos * (1 - SMOOTH_COEFFICIENT);

@@ -114,6 +114,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="Ladder.cs" />
     <Compile Include="NPCAdult.cs" />
+    <Compile Include="NPCChild.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="SpriteEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

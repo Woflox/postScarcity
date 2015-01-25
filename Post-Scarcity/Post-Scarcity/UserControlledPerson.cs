@@ -21,7 +21,7 @@ namespace Post_Scarcity
         const float LADDER_CLIMB_DISTANCE = 16;
 
         float spawnX = MIN_SPAWN_X;
-        Person personTalking = null;
+        public Person personTalking = null;
 
         int conversationIndex = 0;
 
@@ -46,11 +46,14 @@ namespace Post_Scarcity
             "Yesterday I made a painting of a representation of what I remembered the world being like.\n\nPart of it featured a giant man holding the Earth on his back.\n\nI threw it off my balcony."
         };
 
-        int endingConversationIndex = 0;
-        string[] endingConversations =
+        public int endingConversationIndex = 0;
+        public string[] endingConversations =
         {
             "The world is big. Unfathomably so.\n\nEven before this upheaval we were minuscule, each human one amongst billions with no way of truly grasping our own insignificance.",
-            "This is just another step in our history. This is where we abandon our pride and our arrogance. This is where we create for the sake of creating; live for the sake of living. This is where we open our eyes and see the world around us.",
+            "You may think the world has spun out of control and we have been left behind.\n\nBut we will look back on this as just another small part of our metamorphosis.",
+            "\"This was the time when we abandoned our pride and our arrogance.\"",
+            "\"The time when we created for the sake of creating and lived for the sake of living.\"",
+            "\"The time when we opened our eyes and saw the world around us.\"",
             "What do we do now? The answer is simple:",
             "We live."
         };
@@ -87,6 +90,18 @@ namespace Post_Scarcity
                         }
                         continue;
                     }
+                    NPCChild child = entity as NPCChild;
+                    if (child != null)
+                    {
+                        if (state == State.Normal
+                            && Vector2.Distance(position, child.position) < CONVERSATION_DISTANCE)
+                        {
+                            TalkTo(child);
+                            Game1.instance.fadeStarted = true;
+                        }
+                        continue;
+                    }
+
                     Ladder ladder = entity as Ladder;
                     if (ladder != null)
                     {
@@ -106,17 +121,28 @@ namespace Post_Scarcity
                     Game1.instance.entities.Add(new NPCAdult(position.X + SPAWN_MIN_DISTANCE + (float)rand.NextDouble() * SPAWN_RANGE));
                 }
             }
-            else if (state == State.Climbing || state == State.Looking)
+            else if (state == State.Climbing && !reachedTop)
             {
                 float progress = (Game1.boundary.Top - position.Y) / Ladder.LADDER_HEIGHT;
-                //TODO: music fade in
+                Game1.instance.soundFade = progress * progress;
             }
             if (state == State.Looking)
             {
                 if (!reachedTop)
                 {
                     reachedTop = true;
+                    Game1.instance.soundFade = 1;
+                    foreach (SpriteEntity entity in Game1.instance.entities)
+                    {
+                        NPCAdult npc = entity as NPCAdult;
+                        if (npc != null)
+                        {
+                            //easier than implementing object destruction
+                            npc.position.Y = 5000;
+                        }
+                    }
 
+                    Game1.instance.entities.Add(new NPCChild(position.X - 327));
                 }
             }
         }
@@ -128,13 +154,21 @@ namespace Post_Scarcity
             state = State.Talking;
             personTalking = person;
             person.flipped = person.position.X > position.X;
-            DialogBox.instance.ShowDialog(regularConversions[conversationIndex]);
-            conversationIndex += 1;
+            if (person is NPCAdult)
+            {
+                DialogBox.instance.ShowDialog(regularConversions[conversationIndex]);
+                conversationIndex += 1;
+            }
+            else
+            {
+                DialogBox.instance.ShowDialog(endingConversations[endingConversationIndex]);
+                endingConversationIndex += 1;
+            }
         }
 
         public void StopTalking()
         {
-            if (true)//conversationIndex == regularConversions.Length && !conversationsExhausted)
+            if (conversationIndex == regularConversions.Length && !conversationsExhausted)
             {
                 foreach (SpriteEntity entity in Game1.instance.entities)
                 {

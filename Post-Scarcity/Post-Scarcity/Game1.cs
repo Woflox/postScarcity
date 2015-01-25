@@ -21,6 +21,7 @@ namespace Post_Scarcity
         public const int SCREEN_WIDTH = 1366;
         public const int SCREEN_HEIGHT = 768;
         const bool FULL_SCREEN = false;
+        const float BLACK_SCREEN_TIME = 5.0f;
 
 
         public static Rectangle boundary = new Rectangle(-200, -184, 10000000, 184 * 2);
@@ -36,8 +37,19 @@ namespace Post_Scarcity
         BasicEffect effect;
         SoundEffect streetNoise;
         SoundEffectInstance streetNoiseInstance;
+        SoundEffect pads;
+        SoundEffectInstance padsInstance;
+        SoundEffect padsEnding;
         Background background;
         SpriteEntity sky;
+        public bool gameOver = false;
+        float timeSinceGameOver = 0;
+        SpriteFont titleFont;
+
+        public bool fadeStarted = false;
+        public float fadeValue = 1;
+
+        public float soundFade = 0;
 
         public UserControlledPerson userPerson;
         
@@ -73,10 +85,20 @@ namespace Post_Scarcity
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = new BasicEffect(GraphicsDevice);
             streetNoise = Content.Load<SoundEffect>("street-noise");
+            titleFont = Content.Load<SpriteFont>("SpriteFont1");
             streetNoiseInstance = streetNoise.CreateInstance();
             streetNoiseInstance.IsLooped = true;
             streetNoiseInstance.Volume = 1.0f;
             streetNoiseInstance.Play();
+
+            pads = Content.Load<SoundEffect>("padsloop");
+            padsInstance = pads.CreateInstance();
+            padsInstance.IsLooped = true;
+            padsInstance.Volume = 0;
+            padsInstance.Play();
+
+            padsEnding = Content.Load<SoundEffect>("padsending");
+
             new DialogBox();
             newGame();
         }
@@ -99,13 +121,14 @@ namespace Post_Scarcity
             camera = new Camera(new Vector2(0, 0));
             background = new Background();
             sky = new SpriteEntity(Vector2.Zero, "sky");
-            Ladder.Spawn(100);
             Streak.InitializeWeights(true);
+            TextureLoader.LoadTexture("girl");
             for (int i = 0; i < streaks.Length; i++)
             {
                 streaks[i] = new Streak();
             }
             Streak.InitializeWeights(false);
+            Ladder.Spawn(500);
         }
 
         /// <summary>
@@ -120,6 +143,24 @@ namespace Post_Scarcity
                 this.Exit();
 
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (fadeStarted)
+            {
+                fadeValue -= dt;
+                if (fadeValue < 0)
+                {
+                    fadeValue = 0;
+                }
+            }
+
+            if (gameOver)
+            {
+                timeSinceGameOver += dt;
+                if (timeSinceGameOver > BLACK_SCREEN_TIME)
+                {
+                    this.Exit();
+                }
+            }
 
             Input.Update(dt);
             for (int i = 0; i < entities.Count; i++)
@@ -136,7 +177,10 @@ namespace Post_Scarcity
             background.Update(dt);
             sky.position = new Vector2(camera.position.X, (-2000) + 40);
             DialogBox.instance.Update(dt);
+            streetNoiseInstance.Volume = 1 - soundFade;
+            padsInstance.Volume = soundFade * 0.25f;
 
+            t += dt;
             base.Update(gameTime);
         }
 
@@ -147,7 +191,10 @@ namespace Post_Scarcity
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
+            if (gameOver)
+            {
+                return;
+            }
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
             foreach (Streak streak in streaks)
@@ -159,17 +206,41 @@ namespace Post_Scarcity
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
+            background.Render();
+
+            spriteBatch.End();
+
+            if (fadeValue < 1)
+            {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+                spriteBatch.Draw(TextureLoader.LoadTexture("dialogbackground"), new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight),
+                    new Color(0,0,0, 1-(fadeValue*fadeValue)));
+
+                spriteBatch.End();
+            }
+
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
+
             foreach (SpriteEntity entity in entities)
             {
                 entity.Render();
             }
-            background.Render();
 
             spriteBatch.End();
 
             DialogBox.instance.Render();
 
+            if (t > 1.0f && t < 4.0f)
+            {
+                spriteBatch.Begin();
+                string title = "POST-SCARCITY";
+                spriteBatch.DrawString(titleFont, title, new Vector2((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - titleFont.MeasureString(title).X / 2, 160), Color.White);
+                spriteBatch.End();
+            }
+
             base.Draw(gameTime);
         }
+        float t = 0;
     }
 }
