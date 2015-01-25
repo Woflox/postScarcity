@@ -23,7 +23,6 @@ namespace Post_Scarcity
 
         AIState aiState;
         public bool neverMove = false;
-        public bool alreadyTalked = false;
 
         public NPCAdult(float x)
             : base(new Vector2(x,0), "man", new List<Color> { Color.Blue, Color.Black, new Color(0, 128, 255), Color.DarkBlue, Color.Blue, Color.Black })
@@ -41,6 +40,11 @@ namespace Post_Scarcity
             if (position.X < 750)
             {
                 neverMove = true;
+            }
+
+            if (Game1.instance.userPerson.conversationsExhausted)
+            {
+                MakeInactive();
             }
 
             MakeDecision();
@@ -80,6 +84,12 @@ namespace Post_Scarcity
                     break;
             }
             base.Update(dt);
+        }
+
+        public void MakeInactive()
+        {
+            state = State.Normal;
+            colors = new List<Color> { Color.DarkBlue, new Color(0, 0, 0, 0.75f), new Color(48, 48, 48), new Color(0, 0, 0, 0.75f) };
         }
     }
 }

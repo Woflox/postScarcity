@@ -31,8 +31,15 @@ namespace Post_Scarcity
         public SpriteBatch spriteBatch;
 
         public List<SpriteEntity> entities;
-        Camera camera;
+        Streak[] streaks = new Streak[Streak.NUM_STREAKS];
+        public Camera camera;
         BasicEffect effect;
+        SoundEffect streetNoise;
+        SoundEffectInstance streetNoiseInstance;
+        Background background;
+        SpriteEntity sky;
+
+        public UserControlledPerson userPerson;
         
         public Game1()
         {
@@ -65,6 +72,12 @@ namespace Post_Scarcity
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             effect = new BasicEffect(GraphicsDevice);
+            streetNoise = Content.Load<SoundEffect>("street-noise");
+            streetNoiseInstance = streetNoise.CreateInstance();
+            streetNoiseInstance.IsLooped = true;
+            streetNoiseInstance.Volume = 1.0f;
+            streetNoiseInstance.Play();
+            new DialogBox();
             newGame();
         }
 
@@ -80,9 +93,18 @@ namespace Post_Scarcity
         void newGame()
         {
             entities = new List<SpriteEntity>();
-            entities.Add(new UserControlledPerson(Vector2.Zero));
+            userPerson = new UserControlledPerson(Vector2.Zero);
+            entities.Add(userPerson);
             entities.Add(new NPCAdult(700));
             camera = new Camera(new Vector2(0, 0));
+            background = new Background();
+            sky = new SpriteEntity(Vector2.Zero, "sky");
+            Streak.InitializeWeights(true);
+            for (int i = 0; i < streaks.Length; i++)
+            {
+                streaks[i] = new Streak();
+            }
+            Streak.InitializeWeights(false);
         }
 
         /// <summary>
@@ -104,7 +126,15 @@ namespace Post_Scarcity
                 entities[i].Update(dt);
             }
 
+            foreach (Streak streak in streaks)
+            {
+                streak.Update(dt);
+            }
+
             camera.Update(dt);
+            background.Update(dt);
+            sky.position = new Vector2(camera.position.X, (-2000) + 40);
+            DialogBox.instance.Update(dt);
 
             base.Update(gameTime);
         }
@@ -116,14 +146,27 @@ namespace Post_Scarcity
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
+
+            foreach (Streak streak in streaks)
+            {
+                streak.Render();
+            }
+            sky.Render();
+            spriteBatch.End();
+
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
             foreach (SpriteEntity entity in entities)
             {
                 entity.Render();
             }
+            background.Render();
 
             spriteBatch.End();
+
+            DialogBox.instance.Render();
 
             base.Draw(gameTime);
         }

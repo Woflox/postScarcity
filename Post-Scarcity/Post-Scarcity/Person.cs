@@ -15,7 +15,8 @@ namespace Post_Scarcity
         {
             Normal,
             Talking,
-            Climbing
+            Climbing,
+            Looking
         }
 
         const float COLOR_CHANGE_RATE = 1 / 28f;
@@ -29,8 +30,9 @@ namespace Post_Scarcity
         protected Vector2 moveDir;
         public State state;
         protected Animation animation;
+        public bool hasTalked = false;
 
-        List<Color> colors;
+        public List<Color> colors;
 
         public Person(Vector2 pos, string textureName, List<Color> colors)
             : base(pos, textureName, 58)
@@ -61,6 +63,10 @@ namespace Post_Scarcity
                     break;
                 case State.Climbing:
                     position.Y += moveDir.Y;
+                    if (position.Y > Game1.boundary.Bottom)
+                    {
+                        state = State.Normal;
+                    }
                     break;
             }
 
@@ -81,13 +87,20 @@ namespace Post_Scarcity
                     {
                         flipped = true;
                     }
-                    animationRate = WALK_ANIMATION_RATE * moveDir.Length();
+                    animationRate = WALK_ANIMATION_RATE / moveDir.Length();
                 }
             }
             else
             {
                 SetAnimation("Climbing");
-                animationRate = CLIMB_ANIMATION_RATE * moveDir.Y;
+                if (moveDir.Y != 0)
+                {
+                    animationRate = CLIMB_ANIMATION_RATE / Math.Abs(moveDir.Y);
+                }
+                else
+                {
+                    animationRate = 0;
+                }
             }
 
             base.Update(dt);
