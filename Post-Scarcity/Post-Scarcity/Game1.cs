@@ -11,18 +11,34 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Post_Scarcity
 {
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
+        public const int SCREEN_WIDTH = 1366;
+        public const int SCREEN_HEIGHT = 768;
+        const bool FULL_SCREEN = false;
+
+
+        public static Rectangle boundary = new Rectangle(-200, -184, 10000000, 184 * 2);
+
+        public static Game1 instance;
+
+        GraphicsDeviceManager graphics;
+        public SpriteBatch spriteBatch;
+
+        public List<SpriteEntity> entities;
+        Camera camera;
+        BasicEffect effect;
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            instance = this;
         }
 
         /// <summary>
@@ -33,8 +49,10 @@ namespace Post_Scarcity
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            graphics.IsFullScreen = FULL_SCREEN;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -46,8 +64,8 @@ namespace Post_Scarcity
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            effect = new BasicEffect(GraphicsDevice);
+            newGame();
         }
 
         /// <summary>
@@ -57,6 +75,14 @@ namespace Post_Scarcity
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+        }
+
+        void newGame()
+        {
+            entities = new List<SpriteEntity>();
+            entities.Add(new UserControlledPerson(Vector2.Zero));
+            entities.Add(new NPCAdult(700));
+            camera = new Camera(new Vector2(0, 0));
         }
 
         /// <summary>
@@ -70,7 +96,15 @@ namespace Post_Scarcity
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Input.Update(dt);
+            for (int i = 0; i < entities.Count; i++)
+            {
+                entities[i].Update(dt);
+            }
+
+            camera.Update(dt);
 
             base.Update(gameTime);
         }
@@ -81,9 +115,15 @@ namespace Post_Scarcity
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
-            // TODO: Add your drawing code here
+            foreach (SpriteEntity entity in entities)
+            {
+                entity.Render();
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
