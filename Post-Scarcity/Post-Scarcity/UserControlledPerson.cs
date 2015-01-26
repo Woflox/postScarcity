@@ -16,6 +16,7 @@ namespace Post_Scarcity
         const float MIN_SPAWN_X = 400;
         const float SPAWN_EVERY = 400;
         const float SPAWN_MIN_DISTANCE = 1200;
+        const float LADDER_SPAWN_DISTANCE = 2200;
         const float SPAWN_RANGE = 1000;
         const float CONVERSATION_DISTANCE = 30;
         const float LADDER_CLIMB_DISTANCE = 16;
@@ -31,25 +32,27 @@ namespace Post_Scarcity
 
         string[] regularConversions =
         {
-            "I don't have to worry about money any more.\n\nBut I feel a bit empty.",
+            "I don't have to worry about money anymore.\n\nBut I feel a bit empty.",
             "The world moves so fast now. I can't keep up.",
             "They're better than us. Smarter and more efficient.\n\nI feel so inferior.",
-            "We created them but I don't think that matters. Nobody owns anything any more.",
+            "We created them but I don't think that matters. Nobody owns anything anymore.",
             "We're obsolete. There's nothing you can do about it.",
             "I've heard that humans are happier than ever before. Are you happy?",
             "We used to work for a living. We worked towards our future. Built the walls that surrounded us.\n\nWhat do we do now? I've been walking these streets for days and I haven't found anything.",
+            "They can keep improving themselves.\n\nWe're stuck in these bodies.",
             "I remember working in a factory. My body was sore and I was always tired, but it was a big part of my life.\n\nNow I can do whatever I want, but I don't know what to do.",
             "My daughter's view of the world is so different from mine. She doesn't know what it was like before.\n\nI can't relate to her.",
             "I feel like the moments in my life aren't connected together in the same way as before.\n\nWithout progression, things don't feel sequential. Like yesterday and last year are the same thing and I couldn't tell you which is which.",
             "I try to create. To express things that are uniquely human, uniquely me. But I feel as if I'm speaking into a void, into empty space.\n\nWhat can I express that's new if the robots know us better than we know ourselves?",
-            "What drive is there to achieve when we are forever in their shadow? Our contributions are infinitesimal.",
-            "Yesterday I made a painting of a representation of what I remembered the world being like.\n\nPart of it featured a giant man holding the Earth on his back.\n\nI threw it off my balcony."
+            "What drive is there to achieve when we are forever in their shadow?",
+            "Yesterday I made a painting of a representation of what I remembered the world being like.\n\nI threw it off my balcony.",
+            "I'm lost. Tumbling through endless rooms with no agency. A huge system of tunnels that grows faster than I can fall.\n\nI don't know what to do."
         };
 
         public int endingConversationIndex = 0;
         public string[] endingConversations =
         {
-            "The world is big. Unfathomably so.\n\nEven before this upheaval we were minuscule, each human one amongst billions with no way of truly grasping our own insignificance.",
+            "The world is big. Unfathomably so.\n\nEven before this upheaval we were minuscule, each human one among billions with no way of truly grasping our own insignificance.",
             "You may think the world has spun out of control and we have been left behind.\n\nBut we will look back on this as just another small part of our metamorphosis.",
             "\"This was the time when we abandoned our pride and our arrogance.\"",
             "\"The time when we created for the sake of creating and lived for the sake of living.\"",
@@ -57,7 +60,7 @@ namespace Post_Scarcity
             "What do we do now? The answer is simple:",
             "We live."
         };
-
+        
         public UserControlledPerson(Vector2 pos)
             : base(pos, "man", new List<Color> { Color.Magenta, Color.Yellow, Color.Blue, Color.White })
         {
@@ -179,7 +182,7 @@ namespace Post_Scarcity
                     }
                 }
                 conversationsExhausted = true;
-                Ladder.Spawn(position.X + SPAWN_MIN_DISTANCE);
+                Ladder.Spawn(position.X + LADDER_SPAWN_DISTANCE);
             }
             else
             {

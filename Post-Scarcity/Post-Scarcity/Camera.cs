@@ -51,6 +51,7 @@ namespace Post_Scarcity
             targetPos.X = Math.Max(Game1.boundary.Left + Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
             targetPos.X = Math.Min(Game1.boundary.Right- Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth / 2, targetPos.X);
             targetPos.Y = Math.Max(targetPos.Y, MIN_Y + Game1.instance.GraphicsDevice.PresentationParameters.BackBufferHeight / 2);
+            targetPos.Y = Math.Min(targetPos.Y, Game1.boundary.Bottom - Game1.instance.GraphicsDevice.PresentationParameters.BackBufferHeight / 2);
 
             position = position * SMOOTH_COEFFICIENT + targetPos * (1 - SMOOTH_COEFFICIENT);
 

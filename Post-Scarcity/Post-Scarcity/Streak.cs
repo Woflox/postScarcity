@@ -106,6 +106,16 @@ namespace Post_Scarcity
                 }
             }
 
+            if (!first)
+            {
+                if (position.Y > Game1.instance.camera.boundary.Top)
+                {
+                    float volume = 0.75f * (float)Math.Pow(1 - Game1.instance.soundFade, 5);
+                    Game1.instance.carComing.Play(volume, 0, direction == Direction.Left ? 1 : -1);
+                    Game1.instance.carLeaving.Play(volume, 0, direction == Direction.Left ? -1 : 1); 
+                }
+
+            }
         }
 
         public void Update(float dt)

@@ -68,6 +68,13 @@ namespace Post_Scarcity
                 action = false;
             }
 
+            if ((keyboardState.IsKeyDown(Keys.F11) && !lastKeyboardState.IsKeyDown(Keys.F11)))
+            {
+                Game1.instance.FULL_SCREEN = !Game1.instance.FULL_SCREEN;
+                Game1.instance.graphics.IsFullScreen = Game1.instance.FULL_SCREEN;
+                Game1.instance.graphics.ApplyChanges();
+            }
+
             lastGamePadState = gamePadState;
             lastKeyboardState = keyboardState;
         }

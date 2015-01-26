@@ -18,7 +18,7 @@ namespace Post_Scarcity
         public static void Spawn(float xPos)
         {
             Game1.instance.entities.Add(new Ladder(xPos));
-            Game1.boundary.Width = (int)((xPos - Game1.instance.camera.boundary.X) + CAMERA_PADDING);
+            Game1.boundary.Width = (int)((xPos - Game1.boundary.X) + CAMERA_PADDING);
         }
 
         public Ladder(float xPos)

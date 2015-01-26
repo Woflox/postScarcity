@@ -152,6 +152,10 @@ namespace Post_Scarcity
             textShown = "";
             readingFast = false;
             AddLetter();
+            if (Game1.instance.userPerson.endingConversationIndex == Game1.instance.userPerson.endingConversations.Length - 1)
+            {
+                Game1.instance.StartOutroFade();
+            }
         }
 
         string AddNewLines(string text)

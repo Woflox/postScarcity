@@ -17,7 +17,7 @@ namespace Post_Scarcity
         const int RENDER_DISTANCE = 1500;
         const int DOTTED_LINE_Y = -25;
         const int SOLID_LINE_Y = -200;
-        const int LAMP_POST_Y = -365;
+        const int LAMP_POST_Y = -363;
         const float LAMP_POST_ANIMATION_RATE = 1 / 30f;
         static readonly Color DOTTED_LINE_COLOR = Color.Magenta;
         static readonly Color SOLID_LINE_COLOR = Color.White;

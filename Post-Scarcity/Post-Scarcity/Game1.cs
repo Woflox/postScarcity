@@ -20,7 +20,7 @@ namespace Post_Scarcity
 
         public const int SCREEN_WIDTH = 1366;
         public const int SCREEN_HEIGHT = 768;
-        const bool FULL_SCREEN = false;
+        public bool FULL_SCREEN = true;
         const float BLACK_SCREEN_TIME = 5.0f;
 
 
@@ -28,7 +28,7 @@ namespace Post_Scarcity
 
         public static Game1 instance;
 
-        GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
 
         public List<SpriteEntity> entities;
@@ -45,6 +45,8 @@ namespace Post_Scarcity
         public bool gameOver = false;
         float timeSinceGameOver = 0;
         SpriteFont titleFont;
+        public SoundEffect carComing;
+        public SoundEffect carLeaving;
 
         public bool fadeStarted = false;
         public float fadeValue = 1;
@@ -97,6 +99,9 @@ namespace Post_Scarcity
             padsInstance.Volume = 0;
             padsInstance.Play();
 
+            carComing = Content.Load<SoundEffect>("carcoming");
+            carLeaving = Content.Load<SoundEffect>("carleaving");
+
             padsEnding = Content.Load<SoundEffect>("padsending");
 
             new DialogBox();
@@ -128,7 +133,6 @@ namespace Post_Scarcity
                 streaks[i] = new Streak();
             }
             Streak.InitializeWeights(false);
-            Ladder.Spawn(500);
         }
 
         /// <summary>
@@ -180,7 +184,19 @@ namespace Post_Scarcity
             streetNoiseInstance.Volume = 1 - soundFade;
             padsInstance.Volume = soundFade * 0.25f;
 
+            if (outroFading)
+            {
+                outroFadeValue -= dt;
+
+                if (outroFadeValue < 0)
+                {
+                    outroFadeValue = 0;
+                }
+                padsInstance.Volume = outroFadeValue * 0.25f;
+            }
+
             t += dt;
+
             base.Update(gameTime);
         }
 
@@ -242,5 +258,14 @@ namespace Post_Scarcity
             base.Draw(gameTime);
         }
         float t = 0;
+
+        bool outroFading = false;
+        float outroFadeValue = 1;
+
+        public void StartOutroFade()
+        {
+            outroFading = true;
+            padsEnding.Play(1.0f, 0, 0);
+        }
     }
 }
