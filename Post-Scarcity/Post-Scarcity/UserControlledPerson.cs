@@ -37,14 +37,14 @@ namespace Post_Scarcity
             "They're better than us. Smarter and more efficient.\n\nI feel so inferior.",
             "We created them but I don't think that matters. Nobody owns anything anymore.",
             "We're obsolete. There's nothing you can do about it.",
-            "I've heard that humans are happier than ever before. Are you happy?",
+            "I've heard that humans are happier than ever before.\n\nAre you happy?",
             "We used to work for a living. We worked towards our future. Built the walls that surrounded us.\n\nWhat do we do now? I've been walking these streets for days and I haven't found anything.",
             "They can keep improving themselves.\n\nWe're stuck in these bodies.",
             "I remember working in a factory. My body was sore and I was always tired, but it was a big part of my life.\n\nNow I can do whatever I want, but I don't know what to do.",
             "My daughter's view of the world is so different from mine. She doesn't know what it was like before.\n\nI can't relate to her.",
             "I feel like the moments in my life aren't connected together in the same way as before.\n\nWithout progression, things don't feel sequential. Like yesterday and last year are the same thing and I couldn't tell you which is which.",
             "I try to create. To express things that are uniquely human, uniquely me. But I feel as if I'm speaking into a void, into empty space.\n\nWhat can I express that's new if the robots know us better than we know ourselves?",
-            "What drive is there to achieve when we are forever in their shadow?",
+            "What can we hope to acheive?",
             "Yesterday I made a painting of a representation of what I remembered the world being like.\n\nI threw it off my balcony.",
             "I'm lost. Tumbling through endless rooms with no agency. A huge system of tunnels that grows faster than I can fall.\n\nI don't know what to do."
         };
