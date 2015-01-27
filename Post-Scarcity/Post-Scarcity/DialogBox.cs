@@ -197,15 +197,16 @@ namespace Post_Scarcity
             {
                 return;
             }
+            float ratio = ((float)Game1.instance.GraphicsDevice.PresentationParameters.BackBufferHeight) / Game1.BASE_HEIGHT;
             Game1.instance.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             Game1.instance.spriteBatch.Draw(background, new Rectangle(
-                (Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - (WIDTH + 2 * PADDING)) / 2, 
-                MARGIN,
-                WIDTH + PADDING * 2,
-                (int)font.MeasureString(textShown).Y / FONT_SCALE + PADDING * 2), new Color(0, 0, 0, 0.5f));
+                (Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - (int)(ratio * (WIDTH + 2 * PADDING))) / 2, 
+                (int)(MARGIN * ratio),
+                (int)(ratio* (WIDTH + PADDING * 2)),
+                (int)(font.MeasureString(textShown).Y * ratio) / FONT_SCALE + PADDING * 2), new Color(0, 0, 0, 0.5f));
             Game1.instance.spriteBatch.DrawString(font, textShown,
-                new Vector2((Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - WIDTH) / 2,
-                            MARGIN + PADDING), Color.White, 0, Vector2.Zero, 1f / FONT_SCALE, SpriteEffects.None, 0);
+                new Vector2((Game1.instance.GraphicsDevice.PresentationParameters.BackBufferWidth - WIDTH * ratio) / 2,
+                            (int)(ratio*(MARGIN + PADDING))), Color.White, 0, Vector2.Zero, ratio / FONT_SCALE, SpriteEffects.None, 0);
             Game1.instance.spriteBatch.End();
         }
     }

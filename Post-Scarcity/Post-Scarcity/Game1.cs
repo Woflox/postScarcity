@@ -17,9 +17,7 @@ namespace Post_Scarcity
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-
-        public const int SCREEN_WIDTH = 1366;
-        public const int SCREEN_HEIGHT = 768;
+        public const int BASE_HEIGHT = 768;
         public bool FULL_SCREEN = true;
         const float BLACK_SCREEN_TIME = 5.0f;
 
@@ -70,8 +68,8 @@ namespace Post_Scarcity
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
-            graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            graphics.PreferredBackBufferWidth = graphics.GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = graphics.GraphicsDevice.DisplayMode.Height;
             graphics.IsFullScreen = FULL_SCREEN;
             graphics.ApplyChanges();
             base.Initialize();
@@ -211,7 +209,7 @@ namespace Post_Scarcity
             {
                 return;
             }
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
             foreach (Streak streak in streaks)
             {
@@ -220,7 +218,7 @@ namespace Post_Scarcity
             sky.Render();
             spriteBatch.End();
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
             background.Render();
 
@@ -236,7 +234,7 @@ namespace Post_Scarcity
                 spriteBatch.End();
             }
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.matrix);
 
             foreach (SpriteEntity entity in entities)
             {
@@ -251,7 +249,10 @@ namespace Post_Scarcity
             {
                 spriteBatch.Begin();
                 string title = "POST-SCARCITY";
-                spriteBatch.DrawString(titleFont, title, new Vector2((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - titleFont.MeasureString(title).X / 2, 160), Color.White);
+                float ratio = ((float)GraphicsDevice.PresentationParameters.BackBufferHeight) / BASE_HEIGHT;
+                float stringScale = 0.72f * ratio;
+                spriteBatch.DrawString(titleFont, title, new Vector2((GraphicsDevice.PresentationParameters.BackBufferWidth / 2) - titleFont.MeasureString(title).X * stringScale / 2, 160 * ratio),
+                    Color.White, 0, Vector2.Zero, stringScale, SpriteEffects.None, 0);
                 spriteBatch.End();
             }
 
