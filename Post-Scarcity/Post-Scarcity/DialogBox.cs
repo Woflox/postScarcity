@@ -74,6 +74,10 @@ namespace Post_Scarcity
             char c = currentString[charIndex];
             float letterTime = (c == '.' || c == '?' || c == '!' || c == ',' || c == ';' || c == ':') 
                 ? PUNCTUATION_TIME : LETTER_TIME;
+            if (currentString[charIndex + 1] == '"')
+            {
+                letterTime = LETTER_TIME;
+            }
             if (readingFast)
             {
                 letterTime /= FAST_QUOTIENT;
