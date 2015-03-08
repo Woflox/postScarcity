@@ -164,6 +164,7 @@ namespace Post_Scarcity
                 }
             }
 
+            camera.Update(dt);
             Input.Update(dt);
             for (int i = 0; i < entities.Count; i++)
             {
@@ -175,7 +176,6 @@ namespace Post_Scarcity
                 streak.Update(dt);
             }
 
-            camera.Update(dt);
             background.Update(dt);
             sky.position = new Vector2(camera.position.X, (-2000) + 40);
             DialogBox.instance.Update(dt);

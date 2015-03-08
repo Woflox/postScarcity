@@ -133,9 +133,13 @@ namespace Post_Scarcity
 
         public void Render()
         {
-            Game1.instance.spriteBatch.Draw(texture, 
-                new Vector2(position.X - texture.Width * scale / 2, position.Y), 
-                null, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            if (position.Y + texture.Height > Game1.instance.camera.boundary.Top
+             && position.Y < Game1.instance.camera.boundary.Bottom)
+            {
+                Game1.instance.spriteBatch.Draw(texture,
+                    new Vector2(position.X - texture.Width * scale / 2, position.Y),
+                    null, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            }
         }
     }
 }

@@ -28,7 +28,13 @@ namespace Post_Scarcity
 
         public virtual void Render()
         {
-            Game1.instance.spriteBatch.Draw(texture, new Vector2(position.X - texture.Width / 2, position.Y - texture.Height), color);
+            if (position.X + texture.Width / 2 > Game1.instance.camera.boundary.Left
+             && position.X - texture.Width / 2 < Game1.instance.camera.boundary.Right
+             && position.Y > Game1.instance.camera.boundary.Top
+             && position.Y - texture.Height < Game1.instance.camera.boundary.Bottom)
+            {
+                Game1.instance.spriteBatch.Draw(texture, new Vector2(position.X - texture.Width / 2, position.Y - texture.Height), color);
+            }
         }
     }
 }

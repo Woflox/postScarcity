@@ -70,15 +70,21 @@ namespace Post_Scarcity
 
         public override void Render()
         {
-            Rectangle srcRect;
-            srcRect = new Rectangle(frame * spriteWidth, 0, spriteWidth, texture.Height);
+            if (position.X + spriteWidth / 2 > Game1.instance.camera.boundary.Left
+             && position.X - spriteWidth / 2 < Game1.instance.camera.boundary.Right
+             && position.Y > Game1.instance.camera.boundary.Top
+             && position.Y - texture.Height < Game1.instance.camera.boundary.Bottom)
+            {
+                Rectangle srcRect;
+                srcRect = new Rectangle(frame * spriteWidth, 0, spriteWidth, texture.Height);
 
-            Game1.instance.spriteBatch.Draw(texture,
-                                            new Vector2(position.X - spriteWidth / 2, position.Y - texture.Height),
-                                            new Rectangle(frame*spriteWidth, 0, spriteWidth, texture.Height),
-                                            color, 0, Vector2.Zero, 1,
-                                            flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                                            Math.Max(0.0001f,(position.Y - Game1.boundary.Y) / Game1.boundary.Height));
+                Game1.instance.spriteBatch.Draw(texture,
+                                                new Vector2(position.X - spriteWidth / 2, position.Y - texture.Height),
+                                                new Rectangle(frame * spriteWidth, 0, spriteWidth, texture.Height),
+                                                color, 0, Vector2.Zero, 1,
+                                                flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                                                Math.Max(0.0001f, (position.Y - Game1.boundary.Y) / Game1.boundary.Height));
+            }
         }
     }
 }

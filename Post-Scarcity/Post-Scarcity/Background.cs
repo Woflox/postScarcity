@@ -14,7 +14,6 @@ namespace Post_Scarcity
         const int DOTTED_LINE_DISTANCE = 196;
         const int LAMP_POST_DISTANCE = 1400;
         const int LAMP_POST_OFFSET = -600;
-        const int RENDER_DISTANCE = 1500;
         const int DOTTED_LINE_Y = -25;
         const int SOLID_LINE_Y = -200;
         const int LAMP_POST_Y = -363;
@@ -49,27 +48,21 @@ namespace Post_Scarcity
 
         public void Render()
         {
-            int dottedXStart = ((int)(Game1.instance.userPerson.position.X / DOTTED_LINE_DISTANCE)) * DOTTED_LINE_DISTANCE;
-            int dottedRenderCount = (RENDER_DISTANCE * 2) / DOTTED_LINE_DISTANCE;
-            dottedXStart -= (dottedRenderCount / 2) * DOTTED_LINE_DISTANCE;
+            int dottedXStart = (int)Math.Ceiling((double)(Game1.instance.camera.boundary.Left - line.Width) / DOTTED_LINE_DISTANCE) * DOTTED_LINE_DISTANCE;
 
-            for (int i = 0; i < dottedRenderCount; i++)
+            for (int x = dottedXStart; x < Game1.instance.camera.boundary.Right; x += DOTTED_LINE_DISTANCE)
             {
                 Game1.instance.spriteBatch.Draw(line,
-                    new Vector2(dottedXStart + i * DOTTED_LINE_DISTANCE, DOTTED_LINE_Y),
+                    new Vector2(x, DOTTED_LINE_Y),
                     DOTTED_LINE_COLOR);
             }
 
             Game1.instance.spriteBatch.Draw(line,
-                new Rectangle((int)Game1.instance.userPerson.position.X - RENDER_DISTANCE,
+                new Rectangle((int)Game1.instance.camera.boundary.Left - 2,
                                 SOLID_LINE_Y,
-                                RENDER_DISTANCE * 2,
+                                Game1.instance.camera.boundary.Width + 4,
                                 line.Height),
                 SOLID_LINE_COLOR);
-
-            int lampPostXStart = ((int)(Game1.instance.userPerson.position.X / LAMP_POST_DISTANCE)) * LAMP_POST_DISTANCE + LAMP_POST_OFFSET;
-            int lampPostRenderCount = (RENDER_DISTANCE * 2) / LAMP_POST_DISTANCE;
-            lampPostXStart -= (lampPostRenderCount / 2) * LAMP_POST_DISTANCE;
 
             foreach (SpriteEntity entity in Game1.instance.entities)
             {
@@ -79,10 +72,12 @@ namespace Post_Scarcity
                 }
             }
 
-            for (int i = 0; i < 8; i++)
+            int lampPostXStart = (int)Math.Ceiling((double)(Game1.instance.camera.boundary.Left - lampPost1.Width) / LAMP_POST_DISTANCE) * LAMP_POST_DISTANCE + LAMP_POST_OFFSET;
+
+            for (int x = lampPostXStart; x < Game1.instance.camera.boundary.Right; x += LAMP_POST_DISTANCE)
             {
                 Game1.instance.spriteBatch.Draw(frame == 0 ? lampPost1 : lampPost2,
-                    new Vector2(lampPostXStart + i * LAMP_POST_DISTANCE, LAMP_POST_Y),
+                    new Vector2(x, LAMP_POST_Y),
                     Color.White);
             }
 

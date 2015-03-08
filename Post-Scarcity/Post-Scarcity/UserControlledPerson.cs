@@ -44,7 +44,7 @@ namespace Post_Scarcity
             "My daughter's view of the world is so different from mine. She doesn't know what it was like before.\n\nI can't relate to her.",
             "I feel like the moments in my life aren't connected together in the same way as before.\n\nWithout progression, things don't feel sequential. Like yesterday and last year are the same thing and I couldn't tell you which is which.",
             "I try to create. To express things that are uniquely human, uniquely me. But I feel as if I'm speaking into a void.\n\nWhat can I express that's new if the robots know us better than we know ourselves?",
-            "What can we hope to acheive?",
+            "What drive is there to achieve when we are forever in their shadow?",
             "Yesterday I made a painting of a representation of what I remembered the world being like.\n\nI threw it off my balcony.",
             "I'm lost. Tumbling through endless rooms with no agency. A huge system of tunnels that grows faster than I can fall.\n\nI don't know what to do."
         };
